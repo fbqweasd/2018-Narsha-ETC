@@ -20,7 +20,7 @@ ser = serial.Serial(
     timeout=0)
 '''
 
-ser = serial.Serial('COM14',9600)
+ser = serial.Serial('COM14',9600) # 포트 설정 여서 하셈
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -101,12 +101,12 @@ class Ui_Tongsin(object):
 
         elif 0 < (int(self.Tongsin_Count.toPlainText())) < 65537 and 0 < (
             int(self.packet_Interval.toPlainText())) and 0 < (int(self.packet_Length.toPlainText())) < 33:
-            # 이거 알지?
-
+         
+            # 데이터를 인코딩해서 변수에 짠!
             serial_data = bytes(self.Tongsin_Count.toPlainText() + "," + self.packet_Interval.toPlainText(),'utf-8')
 
-            print(serial_data)
-            ser.write(serial_data )
+            print(serial_data) # 이 친구는 삭제하셈
+            ser.write(serial_data) # 이 친구가 아두이노 쪽으로 데이터 날리는 친구
            
             self.uselabel.setText("이용중..")
 
@@ -124,21 +124,22 @@ def read_serial_thread():
 
     while (True):
         tem = ser.readline(6)
+        #여기서 에러사항 현동이가 찍어보는 디버깅 때문에 처음에 이상한 데이터가 넘어옴
         if not (tem == b''):
-            print(tem)
             '''
-            serial_read_data[count]
+            serial_read_data[count] = tem
             count += 1
             if (count >= 50):
                 count = 0
-                print(serial_read_data[count])
-                # 여따가 서버로 전송하는거 짜셈 ㅋ
+                for(i in range(0,50)):
+                    serial_read_data[i] # 이 친구 데이터를 보내셈
+                    # 여따가 서버로 전송하는거 짜셈 ㅋ
             '''
 if __name__ == "__main__":
     import sys
 
     t = threading.Thread(target=read_serial_thread)
-    t.start()
+    t.start() # 아직까지 읽는 거 test를 안해봄 알아서하셈
 
     app = QtWidgets.QApplication(sys.argv)
     Tongsin = QtWidgets.QWidget()
