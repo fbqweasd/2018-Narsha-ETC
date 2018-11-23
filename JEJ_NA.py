@@ -10,14 +10,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import serial
 import threading
+
 '''
 ser = serial.Serial(
-    port='COM7',\
+    port='COM14',\
     baudrate=9600,\
     parity=serial.PARITY_NONE,\
     stopbits=serial.STOPBITS_ONE,\
     timeout=0)
 '''
+
+ser = serial.Serial('COM14',9600)
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
@@ -35,7 +39,7 @@ class Ui_Tongsin(object):
         self.startbtn.clicked.connect(self.startbtn_clicked)
 
         self.uselabel = QtWidgets.QLabel(Tongsin)
-        self.uselabel.setGeometry(QtCore.QRect(450, 50, 111, 41))
+        self.uselabel.setGeometry(QtCore.QRect(350, 50, 200, 50))
         self.uselabel.setObjectName("uselabel")
 
         self.resultbtn = QtWidgets.QPushButton(Tongsin)
@@ -88,19 +92,22 @@ class Ui_Tongsin(object):
     def startbtn_clicked(self):
         self.startbtn.setText("Test가 진행중 입니다.")
 
-        if (self.Tongsin_Count.toPlainText()) == "" or (self.packet_Interval.toPlainText()) == "" or (
-        self.packet_Length.toPlainText()) == "":
+        if (self.Tongsin_Count.toPlainText()) == "" or (self.packet_Interval.toPlainText()) == "" or (self.packet_Length.toPlainText()) == "":
             self.uselabel.setText("값을 입력하세요")
 
         elif not (0 < (int(self.Tongsin_Count.toPlainText())) < 65537 and 0 < (
-        int(self.packet_Interval.toPlainText())) and 0 < (int(self.packet_Length.toPlainText())) < 33):
-            self.uselabel.setText("통신 횟수는 <1~65536>으로 입력해주세요.\n 패킷 전송 값을 입력해주세요.\n 패킷 길이는 <1~32>로 입력해주세요.")
-
-            # 이거 알지?
-            ser.writelines(self.Tongsin_Count.toPlainText() + "," + self.packet_Interval.toPlainText())
+            int(self.packet_Interval.toPlainText())) and 0 < (int(self.packet_Length.toPlainText())) < 33):
+            self.uselabel.setText("통신 횟수는 <1~65536>, \n 패킷 전송 값은 0 이상,\n 패킷 길이는 <1~32>로 입력해주세요.")
 
         elif 0 < (int(self.Tongsin_Count.toPlainText())) < 65537 and 0 < (
-        int(self.packet_Interval.toPlainText())) and 0 < (int(self.packet_Length.toPlainText())) < 33:
+            int(self.packet_Interval.toPlainText())) and 0 < (int(self.packet_Length.toPlainText())) < 33:
+            # 이거 알지?
+
+            serial_data = bytes(self.Tongsin_Count.toPlainText() + "," + self.packet_Interval.toPlainText(),'utf-8')
+
+            print(serial_data)
+            ser.write(serial_data )
+           
             self.uselabel.setText("이용중..")
 
     def endbtn_clicked(self):
@@ -113,14 +120,20 @@ class Ui_Tongsin(object):
 
 def read_serial_thread():
     count = 0
+    serial_read_data = [0] * 50
 
-    while(True):
-        Serial_read_data[count] = ser.readln(6)
-        count += 1
-        if (count >= 50):
-            count = 0
-            #여따가 서버로 전송하는거 짜셈
-
+    while (True):
+        tem = ser.readline(6)
+        if not (tem == b''):
+            print(tem)
+            '''
+            serial_read_data[count]
+            count += 1
+            if (count >= 50):
+                count = 0
+                print(serial_read_data[count])
+                # 여따가 서버로 전송하는거 짜셈 ㅋ
+            '''
 if __name__ == "__main__":
     import sys
 
