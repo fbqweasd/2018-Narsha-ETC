@@ -119,22 +119,13 @@ class Ui_Tongsin(object):
         msgbox.question(self, "Error", "값을 입력해 주세요.", QtWidgets.QMessageBox.Ok)
 
 def read_serial_thread():
-    count = 0
-    serial_read_data = [0] * 50
-
     while (True):
         tem = ser.readline(6)
         #여기서 에러사항 현동이가 찍어보는 디버깅 때문에 처음에 이상한 데이터가 넘어옴
         if not (tem == b''):
-            '''
-            serial_read_data[count] = tem
-            count += 1
-            if (count >= 50):
-                count = 0
-                for(i in range(0,50)):
-                    serial_read_data[i] # 이 친구 데이터를 보내셈
-                    # 여따가 서버로 전송하는거 짜셈 ㅋ
-            '''
+            print(tem)
+            # 여따가 서버 보내는 거 짜믄된다.
+            
 if __name__ == "__main__":
     import sys
 
