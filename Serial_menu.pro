@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-04-15T17:09:04
+# Project created by QtCreator 2019-04-16T10:22:00
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = QT_Serial
+TARGET = Serial_menu
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -26,13 +26,13 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        widget.cpp
+        mainwindow.cpp
 
 HEADERS += \
-        widget.h
+        mainwindow.h
 
 FORMS += \
-        widget.ui
+        mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
